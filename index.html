@@ -1,38 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Redirecting...</title>
-  <script>
-    // Function to get current Thai month name (AAAAAA) and Buddhist year (BBBBBB)
-    function getCurrentThaiDate() {
-      // Thai month names in full (use as needed)
-      const thaiMonths = [
-        'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
-        'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
-      ];
-      
-      // Get current date
-      const today = new Date();
-      
-      // Get Thai month name (AAAAAA)
-      const thaiMonth = thaiMonths[today.getMonth()];
-      
-      // Get Buddhist year (BBBBBB)
-      const buddhistYear = today.getFullYear() + 543; // Convert Gregorian to Buddhist year
-      
-      // Construct the redirect URL
-      const redirectUrl = `https://www.myhora.com/ปฏิทิน/ปฏิทิน-${thaiMonth}-พ.ศ.${buddhistYear}-ฤกษ์.aspx`;
-      
-      // Redirect to the constructed URL
-      window.location.replace(redirectUrl);
-    }
-    
-    // Call the function when the page loads
-    window.onload = getCurrentThaiDate;
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phodi's Applets</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: inline-block;
+            text-align: left;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 1.2em;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-  <p>If you are not redirected automatically, follow this <a href="https://www.myhora.com">link</a>.</p>
+    <header>
+        <h1>Phodi's Applets</h1>
+    </header>
+    <main>
+        <ul>
+            <li><a href="/myhora.html">MyHora Current Calendar</a></li>
+            <li><a href="/video_view.html">Video Device Viewer</a></li>
+        </ul>
+    </main>
 </body>
 </html>
