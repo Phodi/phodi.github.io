@@ -36,7 +36,7 @@
             padding: 10px 10px 20px 10px;
             border-radius: 5px;
             cursor: move;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
 
         .controls.hidden {
@@ -142,7 +142,7 @@
             message.innerHTML = text;
             message.classList.remove('fade-out');
             message.classList.add('show');
-            
+
             if (messageTimeout) {
                 clearTimeout(messageTimeout)
                 messageTimeout = null
@@ -196,7 +196,7 @@
                 const devices = await getDevices();
 
                 if (devices.length > 0) {
-                    deviceSelect.innerHTML = ''; 
+                    deviceSelect.innerHTML = '';
                     devices.forEach(device => {
                         let option = document.createElement('option');
                         option.value = device.deviceId;
