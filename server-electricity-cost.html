@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electricity Cost Calculator</title>
+</head>
+<body>
+
+<h2>Electricity Cost Calculator</h2>
+
+<div>
+  <label for="tdp">TDP of CPU (W): </label>
+  <input type="number" id="tdp" step="1" min="0" required>
+</div>
+
+<div>
+  <label for="electricityCost">Electricity Cost (baht/kWh): </label>
+  <input type="number" id="electricityCost" step="0.01" min="0" value="3.7351" required>
+</div>
+
+<div>
+  <label for="hddPower">HDD Power (W): </label>
+  <input type="number" id="hddPower" step="1" min="0" value="12.5" required>
+</div>
+
+<div>
+  <label for="numberOfHDDs">Number of HDDs: </label>
+  <input type="number" id="numberOfHDDs" step="1" min="0" value="0" required>
+</div>
+
+<br> <!-- Add spacing -->
+
+<div id="result"></div>
+
+<script>
+function calculateCost() {
+  var tdp = parseFloat(document.getElementById('tdp').value);
+  var electricityCost = parseFloat(document.getElementById('electricityCost').value);
+  var hddPower = parseFloat(document.getElementById('hddPower').value);
+  var numberOfHDDs = parseInt(document.getElementById('numberOfHDDs').value);
+  
+  if (isNaN(tdp) || isNaN(electricityCost) || isNaN(hddPower) || isNaN(numberOfHDDs)) {
+    document.getElementById('result').textContent = "Please enter valid numbers.";
+    return;
+  }
+  
+  var cpuPowerConsumption = tdp / 1000; // Convert TDP to kW
+  var hddPowerConsumption = (hddPower * numberOfHDDs) / 1000; // Convert total HDD power to kW
+  var totalPowerConsumption = cpuPowerConsumption + hddPowerConsumption;
+  var dailyCost = totalPowerConsumption * 24 * electricityCost;
+  var monthlyCost = dailyCost * 30; // Assuming 30 days in a month
+  var yearlyCost = dailyCost * 365; // Assuming 365 days in a year
+  
+  document.getElementById('result').innerHTML = "<br>Daily electricity cost: " + dailyCost.toFixed(2) + " baht<br>" +
+                                                 "Monthly electricity cost: " + monthlyCost.toFixed(2) + " baht<br>" +
+                                                 "Yearly electricity cost: " + yearlyCost.toFixed(2) + " baht";
+}
+
+// Add event listeners to input fields to trigger calculation on change
+document.getElementById('tdp').addEventListener('input', calculateCost);
+document.getElementById('electricityCost').addEventListener('input', calculateCost);
+document.getElementById('hddPower').addEventListener('input', calculateCost);
+document.getElementById('numberOfHDDs').addEventListener('input', calculateCost);
+
+// Initial calculation
+calculateCost(); // Perform initial calculation on page load
+</script>
+
+</body>
+</html>
