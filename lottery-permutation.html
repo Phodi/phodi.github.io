@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คำนวณประตูหวย</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #e9ecef;
+        }
+
+        h1 {
+            text-align: center;
+            color: #343a40;
+            margin-bottom: 20px;
+            font-size: 2em;
+            /* Changed font size to 2em */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        input {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+            border: 2px solid #007BFF;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+
+        #calculate-button {
+            background-color: #28a745;
+            /* Green color for Calculate */
+            color: white;
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            text-align: center;
+            border: 2px solid #28a745;
+            /* Matching border */
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        #calculate-button:hover {
+            background-color: #218838;
+            /* Darker green on hover */
+        }
+
+        #copy-button {
+            background-color: #17a2b8;
+            /* Teal color for Copy */
+            color: white;
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            text-align: center;
+            border: 2px solid #17a2b8;
+            /* Matching border */
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: none;
+            /* Default hidden */
+        }
+
+        #copy-button:hover {
+            background-color: #138496;
+            /* Darker teal on hover */
+        }
+
+        #loading {
+            margin: 10px 0;
+            display: none;
+            text-align: center;
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        #result {
+            counter-reset: line;
+            margin-top: 20px;
+            background: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            word-wrap: break-word;
+        }
+
+        #result div {
+            counter-increment: line;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 3px;
+        }
+
+        #result div::before {
+            content: "ประตูที่ " counter(line) ": ";
+            width: 90px;
+            text-align: left;
+            margin-right: 10px;
+            color: gray;
+        }
+
+        #permutation-count {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #28a745;
+            text-align: center;
+        }
+
+        #description {
+            background-color: #ffffff;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #error-message {
+            color: red;
+            margin-top: 10px;
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>คำนวณประตูหวย</h1>
+    <div id="description">
+        <p>เครื่องมือนี้ใช้ในการคำนวณที่เรียกว่า <em>"Permutations without repetitions"</em>
+            (การเรียงสับเปลี่ยนแบบไม่ซ้ำกัน).</p>
+    </div>
+    <input type="text" id="number-input" placeholder="ใส่เลขเด็ด" maxlength="6" onkeypress="return isNumberKey(event)">
+    <div id="error-message">กรุณาใส่หมายเลขที่ถูกต้อง (0-6 หลัก)</div>
+    <button id="calculate-button">คำนวณ</button>
+    <button id="copy-button" style="display:none;">คัดลอกผลลัพธ์</button>
+    <div id="loading">กำลังคำนวณ... โปรดรอ.</div>
+    <div id="permutation-count"></div>
+    <div id="result"></div>
+    <script>
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : evt.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
+
+        function getUniquePermutations(arr) {
+            const results = [];
+            const permute = (current, remaining) => {
+                if (remaining.length === 0) {
+                    results.push(current);
+                    return;
+                }
+                const seen = new Set();
+                for (let i = 0; i < remaining.length; i++) {
+                    if (!seen.has(remaining[i])) {
+                        seen.add(remaining[i]);
+                        const nextCurrent = [...current, remaining[i]];
+                        const nextRemaining = remaining.filter((_, index) => index !== i);
+                        permute(nextCurrent, nextRemaining);
+                    }
+                }
+            };
+            permute([], arr);
+            return results;
+        }
+
+        function isValidInput(input) {
+            const regex = /^[0-9]{1,6}$/; // Only digits and up to 6 characters
+            return regex.test(input);
+        }
+
+        document.getElementById("calculate-button").onclick = () => {
+            const input = document.getElementById("number-input").value;
+            const errorMessage = document.getElementById("error-message");
+            if (!isValidInput(input)) {
+                errorMessage.style.display = 'block';
+                return; // Stop execution if input is invalid
+            } else {
+                errorMessage.style.display = 'none'; // Hide error message when input is valid
+            }
+
+            const numberArray = input.split('').map(num => num.trim()).filter(num => num !== '');
+            const loadingIndicator = document.getElementById("loading");
+            loadingIndicator.style.display = 'block'; // Show loading indicator
+
+            // Use setTimeout to simulate a delay for calculations
+            setTimeout(() => {
+                const uniquePermutations = getUniquePermutations(numberArray);
+                displayResult(uniquePermutations);
+                loadingIndicator.style.display = 'none'; // Hide loading indicator
+            }, 100);  // Delay to simulate calculation time (adjust as needed)
+        };
+
+        function displayResult(permutations) {
+            const resultDiv = document.getElementById("result");
+            const permutationCountDiv = document.getElementById("permutation-count");
+            resultDiv.innerHTML = '';
+            permutationCountDiv.innerHTML = '';
+            document.getElementById("copy-button").style.display = 'none';
+            if (permutations.length === 0) {
+                resultDiv.innerHTML = 'ไม่พบการเรียงลำดับที่ไม่ซ้ำกัน.';
+                permutationCountDiv.innerHTML = '';
+            } else {
+                permutations.forEach(permutation => {
+                    resultDiv.innerHTML += `<div>${permutation.join('')}</div>`;
+                });
+                permutationCountDiv.innerHTML = `มี ${permutations.length} ประตู`;
+                document.getElementById("copy-button").style.display = 'inline-block';
+            }
+        }
+
+        document.getElementById("copy-button").onclick = () => {
+            const resultDiv = document.getElementById("result");
+            const textToCopy = resultDiv.innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert("คัดลอกผลลัพธ์เรียบร้อยแล้ว!");
+            }).catch(err => {
+                alert("ไม่สามารถคัดลอกผลลัพธ์ได้: ", err);
+            });
+        };
+    </script>
+</body>
+
+</html>
