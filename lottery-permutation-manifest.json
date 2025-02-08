@@ -1,0 +1,8 @@
+{
+    "name": "คำนวณประตูหวย",
+    "short_name": "ประตูหวย",
+    "start_url": "lottery-permutation.html",
+    "display": "standalone",
+    "background_color": "#e9ecef",
+    "theme_color": "#007BFF"
+}
