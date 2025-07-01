@@ -1,36 +1,45 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <title>Redirecting...</title>
   <script>
-    // Function to get current Thai month name (AAAAAA) and Buddhist year (BBBBBB)
+    function getCalendarURL() {
+      // Function to get current Thai month name (AAAAAA) and Buddhist year (BBBBBB)
 
       // Get current date
       const today = new Date();
-      
+
       // Get Thai month name (AAAAAA)
-      const month = String(today.getMonth()).padStart(2,'0');
-      
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+
       // Get Buddhist year (BBBBBB)
       const buddhistYear = today.getFullYear() + 543; // Convert Gregorian to Buddhist year
 
       // RSX = สุริยยาตร์
       // RLX = ลาหิรี
       const mode = 'RLX'
-      
+
       // Construct the redirect URL
       const redirectUrl = `https://www.myhora.com/calendar/thai-${month}-${buddhistYear}-${mode}.aspx`;
-      
-      // Redirect to the constructed URL
-      window.location.replace(redirectUrl);
+
+      return redirectUrl
     }
-    
+
+    function redirectToCalendar() {
+      // Redirect to the constructed URL
+      window.location.replace(getCalendarURL());
+      document.getElementById('failsafe-link').href = getCalendarURL();
+    }
+
     // Call the function when the page loads
-    window.onload = getCurrentThaiDate;
+    window.onload = redirectToCalendar;
   </script>
 </head>
+
 <body>
-  <p>If you are not redirected automatically, follow this <a href="https://www.myhora.com">link</a>.</p>
+  <p>If you are not redirected automatically, follow this <a id="failsafe-link" href="#">link</a>.</p>
 </body>
+
 </html>
