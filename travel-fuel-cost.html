@@ -86,7 +86,10 @@
     <label for="fuel-cost">ราคาของเชื้อเพลิง (บาท/ลิตร) : <input type="number" id="fuel-cost" step="0.01" value="32.95"></label>
 </form>
 
-<div id="result"></div>
+<div id="result">
+    <p id="result-fuel-consumption"></p>
+    <p id="result-fuel-cost"></p>
+</div>
 
 <script>
     function calculateFuelCost() {
@@ -109,8 +112,18 @@
 
         const fuelUsed = totalDistance / fuelConsumption;
         const cost = fuelUsed * fuelCost;
-
-        document.getElementById('result').innerHTML = `ค่าใช้จ่ายการเดินทางประมาณ: <strong>บาท ${cost.toFixed(2)}</strong>`;
+        
+        let consumption_html = `ใช้น้ำมันประมาณ: <strong>??? ลิตร</strong>`;
+        if (fuelConsumption !== NaN){
+            consumption_html = `ใช้น้ำมันประมาณ: <strong>${fuelUsed.toFixed(2)} ลิตร</strong>`;
+        }
+        document.getElementById('result-fuel-consumption').innerHTML = consumption_html;
+        
+        let cost_html = `ค่าใช้จ่ายการเดินทางประมาณ: <strong>??? บาท</strong>`;
+        if (cost !== NaN){
+            cost_html = `ค่าใช้จ่ายการเดินทางประมาณ: <strong>${cost.toFixed(2)} บาท</strong>`;
+        }
+        document.getElementById('result-fuel-cost').innerHTML = cost_html;
     }
 
     document.querySelectorAll('#fuel-cost-form input').forEach(input => {
